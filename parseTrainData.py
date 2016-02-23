@@ -12,10 +12,10 @@ def create_label_collection(file):
 			y[i] = np.fromstring(y[i], dtype=int, sep=' ')
 		except:
 			y[i] = []
-	MultiLabelBinarizer().fit_transform(y)
+	return MultiLabelBinarizer().fit_transform(y)
 
 def main():
-	create_label_collection(sys.argv[1])
+	multilabel_mat = create_label_collection(sys.argv[1])
 
 if __name__ == "__main__":
 	main()
