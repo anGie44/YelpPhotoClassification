@@ -1,6 +1,3 @@
-import cv2
-import os
-
 class YelpImageDataset(object):
 	def __init__(self, path):
 		self.train_imgs = []
