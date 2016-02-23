@@ -1,7 +1,8 @@
 class YelpImageDataset(object):
 	def __init__(self, path):
 		self.train_imgs = []
-		self.feature_mat = []
+		self.surf_features = []
+		self.sift_features = []
 		images = os.listdir(path)	
 		for i in images:
 			img = cv2.imread(i, 0)
@@ -12,6 +13,11 @@ class YelpImageDataset(object):
 		surf.setExtended(True)
 		for i in range(len(self.train_imgs)):
 			(kp, des) = surf.detectAndCompute(self.train_imgs[i], None)
-			self.feature_mat.append((kp,des))
+			self.surf_features.append((kp,des))
 
-	
+	def _define_sift_features:
+		sift = cv2.xfeatures2d.SIFT_create()
+		for i in range(len(self.train_imgs)):
+			kp = sift.detectAndCompute(self.train_imgs[i], None)
+			self.sift_features.append(kp)
+
