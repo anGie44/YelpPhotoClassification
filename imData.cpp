@@ -60,6 +60,7 @@ YelpDataset retrieveData(string filename){
 
 		*/
 	}
+	input.close();
 	return (ds);
 }
 
