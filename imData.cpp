@@ -50,7 +50,15 @@ YelpDataset retrieveData(string filename){
 			continue;
 		}
 		img.image = I;
-		ds.restauratId_img_mapping.push_back(img);
+		
+		/* 
+		
+
+		Get train labels and IDs 
+
+
+
+		*/
 	}
 	return (ds);
 }
