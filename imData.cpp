@@ -39,7 +39,7 @@ YelpDataset retrieveData(string filename){
 		cout << "Unable to read file!" << endl;
 		return -1;
 	}
-	while(getline(input, line))
+	while(getline(input, line)){
 		Mat I;
 		YelpImage img;
 		img.filename = line;
