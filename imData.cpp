@@ -5,51 +5,53 @@
 #include <fstream>
 #include <string>
 #include <ctime>
+#include <unordered_map>
 #define DIR "train_photos/"
+#define TOTAL 2527877 //`ls DIR`
+
 using namespace cv;
 using namespace std;
 
-typedef struct{
-	string name;
-	Mat img;
+typedef struct YelpImage{
+	string filename;
+	Mat image;
+	YelpImage(string filename){
+		this->filename = filename;
+	}
+	Mat descriptors;
+	vector<KeyPoint> keypoints;
 }YelpImage;
 
-typedef struct{
-	vector<YelpImage> y;
+typedef struct YelpDataset{
+	unordered_map<string, vector<YelpImage> >restaurantId_img_mapping;
+	YelpDataset();
 }YelpDataset;
 
 Mat& ScanImageAndReduceC(Mat &I, const uchar *table);
 Mat& ScanImageandReduceIterator(Mat &I, const uchar *table);
 Mat& ScanImageAndReduceRandomAccess(Mat &I, const uchar *table);
 
-int main(int argc, char **argv){
-	time_t current_time, end_time;
-	current_time = time(NULL);
+YelpDataset retrieveData(string filename){
 	ifstream input;
-	string line;
 	YelpDataset ds;
-	Mat I;
-	input.open(argv[1]);
+	input.open(filename);
 	if(!input.is_open()){
 		cout << "Unable to read file!" << endl;
-		exit(1);
+		return -1;
 	}
-	while(getline(input, line)){
-		YelpImage y_img;
-		y_img.name = line;
+	while(getline(input, line))
+		Mat I;
+		YelpImage img;
+		img.filename = line;
 		line = DIR + line;
 		I = imread(line, 0);
 		if(!I.data){
 			cout << "No image data" << endl;
-			return -1;
+			continue;
 		}
-		y_img.img = I;
-		//namedWindow(line, CV_WINDOW_AUTOSIZE);
-		//imshow(line, I);
-		//waitKey(0);
-		ds.y.push_back(y_img);
+		img.image = I;
+		ds.restauratId_img_mapping.push_back(img);
 	}
-	end_time = time(NULL);
-	cout << "Total Run Time: " << end_time - current_time << endl;
-	return 0;
+	return (ds);
 }
+
