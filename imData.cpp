@@ -24,7 +24,6 @@ typedef struct YelpImage{
 
 typedef struct YelpDataset{
 	unordered_map<string, vector<YelpImage> >restaurantId_img_mapping;
-	YelpDataset();
 }YelpDataset;
 
 Mat& ScanImageAndReduceC(Mat &I, const uchar *table);
@@ -34,6 +33,7 @@ Mat& ScanImageAndReduceRandomAccess(Mat &I, const uchar *table);
 YelpDataset retrieveData(string filename){
 	ifstream input;
 	YelpDataset ds;
+	string line;
 	input.open(filename);
 	if(!input.is_open()){
 		cout << "Unable to read file!" << endl;
@@ -41,8 +41,7 @@ YelpDataset retrieveData(string filename){
 	}
 	while(getline(input, line)){
 		Mat I;
-		YelpImage img;
-		img.filename = line;
+		YelpImage img = new YelpImage(line);
 		line = DIR + line;
 		I = imread(line, 0);
 		if(!I.data){
