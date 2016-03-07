@@ -14,10 +14,10 @@ using namespace std;
 
 typedef struct YelpImage{
 	string filename;
-	Mat image;
-	YelpImage(string filename){
+    YelpImage(string filename){
 		this->filename = filename;
 	}
+    Mat image;
 	Mat descriptors;
 	vector<KeyPoint> keypoints;
 }YelpImage;
