@@ -254,8 +254,8 @@ def main():
 	testing_data_prep(test_fotos)
 	train_and_predict() #trains 2 classifiers: random forest, forest with xgboost
 	prepare_output()
-	print('Accuracy Score w/Random Forest Classifier: ' % hamming_score(config.Y, config.Y_pred_rf))
-	print('Accuracy Score w/XGBoost Classifier: ' % hamming_score(config.Y, config.Y_pred_xgb))
+	print('Accuracy Score w/Random Forest Classifier: %.2f' % hamming_score(config.Y, config.Y_pred_rf))
+	print('Accuracy Score w/XGBoost Classifier: %.2f' % hamming_score(config.Y, config.Y_pred_xgb))
 
 
 #if __name__ == "__main__":
