@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import cv2
 from PIL import Image
 import cv2
 from subprocess import check_output
@@ -72,6 +71,7 @@ def data_collection_stats():
 	train.reset_index(drop=True)
 
 	print('Number of training samples: ', train.shape[0])
+	print('Number of train samples: ', len(set(train_photos['business_id'])))
 	print('Number of test samples: ', len(set(test_photos['business_id'])))
 	print('Finished reading data...')
 	print('Time elapsed: ' + str((time.time() - config.start_time)/60))
@@ -167,9 +167,9 @@ def train_and_predict():
 
 	for i in range(num_classes):
 		print('Creating Classifier: ', i)
-		rf = RandomForestClassifier(n_estimators=300, max_depth=2*config.img_size[0], n_jobs=-1, oob_score=True, verbose=2, criterion="entropy")
-		gbm = xgb.XGBClassifier(max_depth=2*config.img_size[0], n_estimators=300, learning_rate=0.05)
-
+		rf = RandomForestClassifier(n_estimators=500, max_depth=5, n_jobs=-1, oob_score=True, verbose=2, criterion="entropy")
+		gbm = xgb.XGBClassifier(n_estimators=500, objective='binary:logistic')
+		
 		print('Fitting Random Forest Classifier: ', i)
 		rf.fit(config.X, config.Y[:, i])
 
@@ -179,14 +179,13 @@ def train_and_predict():
 		print('Getting Random Forest Predictions for attribute: ', i)
 		y_pred_rf = rf.predict(config.X_test)
 		config.Y_pred_rf.append(y_pred_rf)
+		print(y_pred_rf)
 
 		print('Getting XGBoost Predictions for attribute: ', i)
 		y_pred_xgb = gbm.predict(config.X_test)
 		config.Y_pred_xgb.append(y_pred_xgb)
-
-		print(y_pred_rf)
 		print(y_pred_xgb)
-
+		
 
 def prepare_output():
 	print('Preparing Output...')
@@ -254,8 +253,8 @@ def main():
 	testing_data_prep(test_fotos)
 	train_and_predict() #trains 2 classifiers: random forest, forest with xgboost
 	prepare_output()
-	print('Accuracy Score w/Random Forest Classifier: %.2f' % hamming_score(config.Y, config.Y_pred_rf))
-	print('Accuracy Score w/XGBoost Classifier: %.2f' % hamming_score(config.Y, config.Y_pred_xgb))
+	print('Accuracy Score w/Random Forest Classifier: %.2f' % (1-hamming_score(config.Y, config.Y_pred_rf)))
+	print('Accuracy Score w/XGBoost Classifier: %.2f' % (1-hamming_score(config.Y, config.Y_pred_xgb)))
 
 
 #if __name__ == "__main__":
